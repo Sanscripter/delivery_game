@@ -8,6 +8,8 @@ public class Driver : MonoBehaviour
     [SerializeField] float steeringDirection = 0;
     [SerializeField] float acceleration = 20f;
     [SerializeField] float currentSpeed = 0f;
+    [SerializeField] float boostSpeed = 100f;
+    [SerializeField] float nerfedSpeed = 6f;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +24,19 @@ public class Driver : MonoBehaviour
         currentSpeed = Input.GetAxis("Vertical") * acceleration * Time.deltaTime;
         this.transform.Rotate(0, 0 , - steeringSpeed * steeringDirection);
         this.transform.Translate(0, currentSpeed, 0);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other) {
+        if (other.gameObject.tag == "Boost") {
+            Debug.Log("Boosted");
+           acceleration = boostSpeed;
+           return;
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D other) {
+            Debug.Log("Nerfed");
+            acceleration = nerfedSpeed;
     }
 
 }
